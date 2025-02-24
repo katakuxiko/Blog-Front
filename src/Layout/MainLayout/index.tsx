@@ -33,44 +33,42 @@ const MainLayout = () => {
 		<div className="bg-indigo-100 min-h-dvh w-lvw flex justify-center items-start">
 			<div className="max-w-4xl bg-white p-4 w-full shadow-lg min-h-dvh relative">
 				<header className="mb-4">
-					<Flex
-						justify="space-between"
-						className="sm:hidden"
-						align="center"
-					>
-						<Flex gap={12}>
-							<NavLink
-								to="/"
-								className="text-gray-950 text-xl font-semibold"
-							>
-								Главная
-							</NavLink>
+					<div className="sm:hidden md:block">
+						<Flex justify="space-between" align="center">
+							<Flex gap={12}>
+								<NavLink
+									to="/"
+									className="text-gray-950 text-xl font-semibold"
+								>
+									Главная
+								</NavLink>
 
-							<NavLink
-								to="/editor"
-								className="text-gray-950 text-xl font-semibold"
+								<NavLink
+									to="/editor"
+									className="text-gray-950 text-xl font-semibold"
+								>
+									Редактор
+								</NavLink>
+							</Flex>
+
+							<Button
+								color="danger"
+								type="text"
+								onClick={() => {
+									localStorage.removeItem("token");
+									navigate("/auth/login");
+									axiosInstanse.defaults.headers.common.Authorization = ``;
+								}}
 							>
-								Редактор
-							</NavLink>
+								Выйти
+							</Button>
 						</Flex>
-
-						<Button
-							color="danger"
-							type="text"
-							onClick={() => {
-								localStorage.removeItem("token");
-								navigate("/auth/login");
-								axiosInstanse.defaults.headers.common.Authorization = ``;
-							}}
-						>
-							Выйти
-						</Button>
-					</Flex>
+					</div>
 				</header>
 
 				<Outlet />
 
-				<footer className="text-center text-gray-500 text-sm absolute bottom-4 w-full left-0">
+				<footer className="text-center text-gray-500 text-sm bottom-4 mt-4 w-full left-0">
 					<div>{dayjs().format("YYYY")}</div>
 				</footer>
 			</div>

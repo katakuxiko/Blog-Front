@@ -15,29 +15,32 @@ export interface IBlogCard {
 
 const BlogCard: FC<IBlogCard> = ({ title, description, id, image, author }) => {
 	return (
-		<Flex gap={12} vertical>
-			<Flex gap={12} justify="space-between">
-				<Typography.Title level={4}>{title}</Typography.Title>
-				{author && (
-					<Typography.Text type="secondary">{author}</Typography.Text>
-				)}
-			</Flex>
+		<div className="bg-white p-4 rounded-lg shadow-md">
+			<Flex gap={12} vertical>
+				<Flex gap={12} justify="space-between">
+					<Typography.Title level={4}>{title}</Typography.Title>
+					{author && (
+						<Typography.Text type="secondary">
+							{author}
+						</Typography.Text>
+					)}
+				</Flex>
 
-			<Typography.Paragraph>{description}</Typography.Paragraph>
-			<div>
-				{image && (
-					<img
-						className="max-w-60 max-h-60"
-						alt={description ?? ""}
-						src={image}
-					/>
-				)}
-			</div>
-			<Typography.Link href={`/post/${id}`}>
-				Узнать детали
-			</Typography.Link>
-			<Divider />
-		</Flex>
+				<Typography.Paragraph>{description}</Typography.Paragraph>
+				<div>
+					{image && (
+						<img
+							className="max-w-60 max-h-60"
+							alt={description ?? ""}
+							src={image}
+						/>
+					)}
+				</div>
+				<Typography.Link href={`/post/${id}`}>
+					Узнать детали
+				</Typography.Link>
+			</Flex>
+		</div>
 	);
 };
 

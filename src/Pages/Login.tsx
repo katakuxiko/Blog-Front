@@ -35,6 +35,7 @@ const Login = () => {
 				<Typography.Title level={3}>Вход</Typography.Title>
 				<Form onFinish={handleAuth} layout="vertical">
 					<Form.Item
+					required={false}
 						rules={[
 							{ required: true, message: "Обязательное поле" },
 						]}
@@ -44,6 +45,7 @@ const Login = () => {
 						<Input size="large" placeholder="Введите логин" />
 					</Form.Item>
 					<Form.Item
+					required={false}
 						rules={[
 							{ required: true, message: "Обязательное поле" },
 							{ min: 8, message: "Минимальная длина 8 символов" },

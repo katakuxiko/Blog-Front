@@ -68,7 +68,7 @@ const MainLayout = () => {
 
 				<Outlet />
 
-				<footer className="text-center text-gray-500 text-sm bottom-4 mt-4 w-full left-0">
+				<footer className="text-center text-gray-500 text-sm bottom-4 mt-4 w-full left-0 absolute">
 					<div>{dayjs().format("YYYY")}</div>
 				</footer>
 			</div>

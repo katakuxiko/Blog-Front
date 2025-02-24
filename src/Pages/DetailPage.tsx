@@ -1,34 +1,31 @@
-import { message, Typography } from "antd";
-import axios from "axios";
+import MDEditor from "@uiw/react-md-editor";
+import { Typography, message } from "antd";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { IBlogCard } from "../Widgets/BlogCard";
-import MDEditor from "@uiw/react-md-editor";
-import dayjs from "dayjs";
+import type { IBlogCard } from "../Widgets/BlogCard";
+import { axiosInstanse } from "../axiosInstanse";
 
 const DetailPage = () => {
 	const { id } = useParams();
-	console.log(id);
 	const [detailData, setDetailData] = useState<IBlogCard>();
 
-	const getDetail = async () => {
-		try {
-			const res = await axios.get(
-				`http://localhost:8080/api/posts/${id}`
-			);
-
-			if (res.data) {
-				message.success("Данные получены");
-				setDetailData(res.data);
-			}
-		} catch (error) {
-			message.error("Произошла ошибка, попробуйте позже");
-		}
-	};
-
 	useEffect(() => {
+		const getDetail = async () => {
+			try {
+				const res = await axiosInstanse.get(`/api/posts/${id}`);
+
+				if (res.data) {
+					message.success("Данные получены");
+					setDetailData(res.data);
+				}
+			} catch (error) {
+				message.error("Произошла ошибка, попробуйте позже");
+			}
+		};
+
 		getDetail();
-	}, []);
+	}, [id]);
 
 	return (
 		<div data-color-mode="light">

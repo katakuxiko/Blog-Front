@@ -6,6 +6,7 @@ import MainLayout from "./Layout/MainLayout";
 import MainPage from "./Pages/MainPage";
 import Editor from "./Pages/Editor";
 import DetailPage from './Pages/DetailPage';
+import Register from './Pages/Register';
 
 const App = () => {
 	const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const App = () => {
 				{
 					path: "/auth/login",
 					element: <Login />,
+				},
+				{
+					path: "/auth/register",
+					element: <Register />,
 				},
 			],
 		},

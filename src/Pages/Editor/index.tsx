@@ -34,17 +34,17 @@ const Editor = () => {
 				<Typography.Title level={2}>Форма создания</Typography.Title>
 				<div>
 					<Form.Item name="title" label="Наименование">
-						<Input placeholder="Наименование" />
+						<Input size="large" placeholder="Наименование" />
 					</Form.Item>
 					<Form.Item name="description" label="Краткое описание">
-						<Input placeholder="Краткое описание" />
+						<Input size="large" placeholder="Краткое описание" />
 					</Form.Item>
 					<Form.Item name="image" label="Фото">
-						<Input placeholder="Наименование" />
+						<Input size="large" placeholder="Наименование" />
 					</Form.Item>
 
 					<Form.Item name="category" label="Категория">
-						<Input placeholder="Категория" />
+						<Input size="large" placeholder="Категория" />
 					</Form.Item>
 				</div>
 

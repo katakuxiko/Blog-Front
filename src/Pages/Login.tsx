@@ -1,12 +1,14 @@
-import { Button, Divider, Flex, Form, Input, message, Typography } from "antd";
+import { Button, Divider, Flex, Form, Input, Typography } from "antd";
+import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
 import { axiosInstanse } from "../axiosInstanse";
-import { AxiosError } from "axios";
+import useUserStore from "../Store/userStore";
 
 const Login = () => {
 	const navigate = useNavigate();
+	const { setUser } = useUserStore();
 
-	const handleAuth = async (val) => {
+	const handleAuth = async (val: { username: string; password: string }) => {
 		try {
 			const res = await axiosInstanse.post<{ token: string }>(
 				"/auth/login",
@@ -15,14 +17,13 @@ const Login = () => {
 
 			if (res.data.token) {
 				localStorage.setItem("token", res.data.token);
+				setUser(res.data.token);
 				axiosInstanse.defaults.headers.common.Authorization = `Bearer ${res.data.token}`;
 				navigate("/");
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				if (error.response?.status === 401) {
-					message.warning(error.response.data);
-				}
+				 console.log(error.code)
 			} else {
 				console.error("Unexpected error:", error);
 			}
@@ -35,7 +36,7 @@ const Login = () => {
 				<Typography.Title level={3}>Вход</Typography.Title>
 				<Form onFinish={handleAuth} layout="vertical">
 					<Form.Item
-					required={false}
+						required={false}
 						rules={[
 							{ required: true, message: "Обязательное поле" },
 						]}
@@ -45,7 +46,7 @@ const Login = () => {
 						<Input size="large" placeholder="Введите логин" />
 					</Form.Item>
 					<Form.Item
-					required={false}
+						required={false}
 						rules={[
 							{ required: true, message: "Обязательное поле" },
 							{ min: 8, message: "Минимальная длина 8 символов" },
@@ -53,7 +54,7 @@ const Login = () => {
 						label="Пароль"
 						name="password"
 					>
-						<Input.Password	
+						<Input.Password
 							size="large"
 							placeholder="Введите пароль"
 						/>

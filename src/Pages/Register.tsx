@@ -26,7 +26,7 @@ const Register = () => {
 		},
 	];
 
-	const handleAuth = async (val) => {
+	const handleAuth = async (val: { username: string; password: string }) => {
 		try {
 			const res = await axiosInstanse.post<{ token: string }>(
 				"/auth/register",

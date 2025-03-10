@@ -2,18 +2,17 @@ import type { Config } from "tailwindcss";
 
 export default {
 	content: ["./src/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
-	
+
 	theme: {
-		 screens: {
-      sm: '640px',
-      md: '768px',
-      lg: '1024px', // Проверьте, что это значение есть
-      xl: '1280px',
-      '2xl': '1536px',
-    },
+		screens: {
+			sm: "640px",
+			md: "768px",
+			lg: "1024px", // Проверьте, что это значение есть
+			xl: "1280px",
+			"2xl": "1536px",
+		},
 		extend: {
 			fontFamily: {
-				
 				sans: [
 					'"Inter"',
 					"ui-sans-serif",

@@ -16,8 +16,7 @@ const DetailPage = () => {
 				const res = await axiosInstanse.get(`/api/posts/${id}`);
 
 				if (res.data) {
-					message.success("Данные получены");
-					setDetailData(res.data);
+						setDetailData(res.data);
 				}
 			} catch (error) {
 				message.error("Произошла ошибка, попробуйте позже");

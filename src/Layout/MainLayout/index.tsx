@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import { MenuOutlined } from "@ant-design/icons";
 import useUserStore from "../../Store/userStore";
-import { instance } from '../../apiInstanse';
+import { instance } from "../../apiInstanse";
 
 const MainLayout = () => {
   const navigate = useNavigate();
@@ -35,9 +35,11 @@ const MainLayout = () => {
   }
 
   return (
-    <div className="bg-indigo-100 min-h-dvh flex justify-center items-start relative">
+    <div className="bg-indigo-100 min-h-dvh flex justify-center items-start relative ">
       <header className="w-full absolute z-50">
-        <div className="p-4 sm:!hidden md:!block bg-white">Blog</div>
+        <div className="p-4 sm:!hidden md:!flex bg-white justify-center items-center">
+          <div className="max-w-4xl w-full">Blog</div>
+        </div>
 
         <Flex
           align="center"
@@ -94,8 +96,12 @@ const MainLayout = () => {
       </header>
       <div className="w-full mb-16 pt-12  flex justify-center items-center flex-col">
         <div className="sticky left-0 bg-white p-4 w-full z-50 top-0">
-          <div className="hidden md:block">
-            <Flex justify="space-between" align="center">
+          <div className="hidden md:block justify-items-center items-center">
+            <Flex
+              justify="space-between"
+              align="center"
+              className="max-w-4xl w-full"
+            >
               <Flex gap={12}>
                 <NavLink
                   to="/"

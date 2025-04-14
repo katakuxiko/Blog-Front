@@ -37,7 +37,7 @@ const MainLayout = () => {
   return (
     <div className="bg-indigo-100 min-h-dvh flex justify-center items-start relative">
       <header className="w-full absolute z-50">
-        <div className="p-4 md:!hidden  bg-white">Blog</div>
+        <div className="p-4 sm:!hidden md:!block bg-white">Blog</div>
 
         <Flex
           align="center"

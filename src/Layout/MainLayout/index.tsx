@@ -1,7 +1,7 @@
 import { Button, Drawer, Flex, Spin, Typography } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { MenuOutlined } from "@ant-design/icons";
 import useUserStore from "../../Store/userStore";
 import { instance } from "../../apiInstanse";
@@ -9,10 +9,14 @@ import { instance } from "../../apiInstanse";
 const MainLayout = () => {
   const navigate = useNavigate();
   const { setUser, user } = useUserStore();
-
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const menu = [
+    { title: "Главная", path: "/" },
+    { title: "Редактор", path: "/editor" },
+  ];
+  console.log(location);
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -103,19 +107,17 @@ const MainLayout = () => {
               className="max-w-4xl w-full"
             >
               <Flex gap={12}>
-                <NavLink
-                  to="/"
-                  className="!text-gray-950 text-xl font-semibold"
-                >
-                  Главная
-                </NavLink>
-
-                <NavLink
-                  to="/editor"
-                  className="!text-gray-950 text-xl font-semibold"
-                >
-                  Редактор
-                </NavLink>
+                {menu.map(({ title, path }) => (
+                  <NavLink
+                    to={path}
+                    className={`text-xl font-semibold hover:!text-blue-500 ${
+                      location.pathname === path
+                       ? "!text-gray-950 " : "!text-gray-600"
+                    }`}
+                  >
+                    {title}
+                  </NavLink>
+                ))}
               </Flex>
 
               <Button

@@ -1,6 +1,6 @@
 import { message, Skeleton } from "antd";
 import { useEffect, useState } from "react";
-import BlogCard, { type IBlogCard } from "../Widgets/BlogCard";
+import BlogCard from "../Widgets/BlogCard";
 import { api } from '../apiInstanse';
 import { PostResponse } from '../Api';
 

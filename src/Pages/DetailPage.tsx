@@ -3,22 +3,28 @@ import { Typography, message } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import type { IBlogCard } from "../Widgets/BlogCard";
-import { api } from '../apiInstanse';
+import { api } from "../apiInstanse";
+import { PostResponse } from "../Api";
 
 const DetailPage = () => {
 	const { id } = useParams();
-	const [detailData, setDetailData] = useState<IBlogCard>();
+	const [detailData, setDetailData] = useState<PostResponse>();
 
 	useEffect(() => {
 		const getDetail = async () => {
+			if (!id) {
+				message.error("Не удалось получить данные поста");
+				return;
+			}
+
 			try {
-				const res = await api.getPostApiV1PostsPostIdGet(id, {});
+				const res = await api.getPostApiV1PostsPostIdGet(+id, {});
 
 				if (res.data) {
 					setDetailData(res.data);
 				}
 			} catch (error) {
+				console.error(error);
 				message.error("Произошла ошибка, попробуйте позже");
 			}
 		};
@@ -30,7 +36,7 @@ const DetailPage = () => {
 		<div data-color-mode="light">
 			<Typography.Title level={2}>{detailData?.title}</Typography.Title>
 			<Typography.Text type="secondary">
-				{dayjs(detailData?.postDate).format("DD MMMM YYYY")}
+				{dayjs(detailData?.created_at).format("DD MMMM YYYY")}
 			</Typography.Text>
 			<MDEditor.Markdown
 				className="bg-amber-50"

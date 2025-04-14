@@ -22,6 +22,7 @@ const Editor = () => {
 				navigate("/");
 			}
 		} catch (error) {
+			console.error(error)
 			message.error("Произошла ошибка, попробуйте позже");
 		} finally {
 			hide();

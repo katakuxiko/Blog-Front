@@ -1,6 +1,7 @@
 import { Flex, Typography } from "antd";
 import type { FC } from "react";
 import { PostResponse } from "../Api";
+import dayjs from 'dayjs';
 
 const BlogCard: FC<PostResponse> = ({
 	title,
@@ -8,7 +9,7 @@ const BlogCard: FC<PostResponse> = ({
 	owner_id,
 	created_at,
 	content,
-	image_url
+	image_url,
 }) => {
 	return (
 		<div className="bg-white p-4 rounded-lg shadow-md">
@@ -19,7 +20,7 @@ const BlogCard: FC<PostResponse> = ({
 					</Typography.Title>
 					{owner_id && (
 						<Typography.Text type="secondary">
-							{owner_id}
+							{dayjs(created_at).format("DD MMMM YYYY")}
 						</Typography.Text>
 					)}
 				</Flex>

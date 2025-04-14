@@ -1,17 +1,18 @@
 import { message, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import BlogCard, { type IBlogCard } from "../Widgets/BlogCard";
-import { axiosInstanse } from "../axiosInstanse";
+import { api } from '../apiInstanse';
+import { PostResponse } from '../Api';
 
 const MainPage = () => {
-	const [posts, setPosts] = useState<IBlogCard[]>([]);
+	const [posts, setPosts] = useState<PostResponse[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const getPosts = async () => {
 			setLoading(true);
 			try {
-				const res = await axiosInstanse.get("/api/posts");
+				const res = await api.getAllPostsApiV1PostsGet({});
 				if (res.data) {
 					setPosts(res.data);
 				}

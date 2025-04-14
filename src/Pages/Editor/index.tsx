@@ -2,19 +2,19 @@ import MDEditor from "@uiw/react-md-editor";
 import { Button, Flex, Form, Input, Typography, message } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosInstanse } from '../../axiosInstanse';
+import { api } from "../../apiInstanse";
+import { PostCreate } from '../../Api';
 
 const Editor = () => {
 	const [value, setValue] = useState("# Test");
 	const navigate = useNavigate();
 
-	const createPost = async (data: any) => {
+	const createPost = async (data: PostCreate) => {
 		const hide = message.loading("Создание поста...", 0);
 		try {
-			const res = await axiosInstanse.post("/api/posts", {
+			const res = await api.createPostApiV1PostsPost({
 				...data,
 				content: value,
-				author: "test",
 			});
 
 			if (res.data) {

@@ -1,9 +1,9 @@
 import { Button, Divider, Flex, Form, Input, message, Typography } from "antd";
 import { useNavigate } from "react-router";
-import { axiosInstanse } from "../axiosInstanse";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { CheckCircleFilled } from "@ant-design/icons";
+import { api } from "../apiInstanse";
 
 const Register = () => {
 	const navigate = useNavigate();
@@ -28,15 +28,15 @@ const Register = () => {
 
 	const handleAuth = async (val: { username: string; password: string }) => {
 		try {
-			const res = await axiosInstanse.post<{ token: string }>(
-				"/auth/register",
-				val
-			);
+			const res = await api.registerUserApiV1UsersPost({
+				password: val.password,
+				username: val.username,
+				email: val.username,
+			});
 
-			if (res.data.token) {
-				localStorage.setItem("token", res.data.token);
-				axiosInstanse.defaults.headers.common.Authorization = `Bearer ${res.data.token}`;
-				navigate("/");
+			if (res.data) {
+				message.success("Вы успешно зарегистрировались!");
+				navigate("/auth/login");
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {

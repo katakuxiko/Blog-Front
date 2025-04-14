@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { create } from "zustand";
-import { axiosInstanse } from '../axiosInstanse';
+import { instance } from '../apiInstanse';
 
 // Определяем интерфейс для состояния пользователя
 interface User {
@@ -20,7 +20,7 @@ const useUserStore = create<UserState>((set) => ({
 	token: null,
 	setUser: (token: string) => {
 		const { sub } = jwtDecode<{ sub: string }>(token);
-		axiosInstanse.defaults.headers.common.Authorization = `Bearer ${token}`;
+		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 
 		set({ token, user: { name: sub } });
 	},

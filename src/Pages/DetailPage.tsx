@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import type { IBlogCard } from "../Widgets/BlogCard";
-import { axiosInstanse } from "../axiosInstanse";
+import { api } from '../apiInstanse';
 
 const DetailPage = () => {
 	const { id } = useParams();
@@ -13,10 +13,10 @@ const DetailPage = () => {
 	useEffect(() => {
 		const getDetail = async () => {
 			try {
-				const res = await axiosInstanse.get(`/api/posts/${id}`);
+				const res = await api.getPostApiV1PostsPostIdGet(id, {});
 
 				if (res.data) {
-						setDetailData(res.data);
+					setDetailData(res.data);
 				}
 			} catch (error) {
 				message.error("Произошла ошибка, попробуйте позже");

@@ -1,18 +1,18 @@
 import { ConfigProvider, message } from "antd";
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import Login from "./Pages/Login";
+import { instance } from "./apiInstanse";
 import AuthLayout from "./Layout/AuthLayout";
 import MainLayout from "./Layout/MainLayout";
-import MainPage from "./Pages/MainPage";
-import Editor from "./Pages/Editor";
 import DetailPage from "./Pages/DetailPage";
+import Editor from "./Pages/Editor";
+import Login from "./Pages/Login";
+import MainPage from "./Pages/MainPage";
 import Register from "./Pages/Register";
-import { useEffect } from "react";
-import { axiosInstanse } from "./axiosInstanse";
 
 const App = () => {
 	useEffect(() => {
-		const interceptor = axiosInstanse.interceptors.response.use(
+		const interceptor = instance.interceptors.response.use(
 			(response) => response,
 			(error) => {
 				console.log("interceptor");
@@ -20,7 +20,7 @@ const App = () => {
 				if (error.response) {
 					if (error.response.status === 403) {
 						localStorage.clear();
-						window.location.href = "/auth/login"; // Вместо reload
+						window.location.href = "/auth/login";
 					}
 
 					if (error.response.data) {
@@ -36,7 +36,7 @@ const App = () => {
 
 		// Очистка интерцептора при размонтировании
 		return () => {
-			axiosInstanse.interceptors.response.eject(interceptor);
+			instance.interceptors.response.eject(interceptor);
 		};
 	}, []);
 

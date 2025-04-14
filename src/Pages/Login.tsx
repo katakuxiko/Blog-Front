@@ -1,7 +1,7 @@
 import { Button, Divider, Flex, Form, Input, Typography } from "antd";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
-import { axiosInstanse } from "../axiosInstanse";
+import { api, setSecurityData } from "../apiInstanse";
 import useUserStore from "../Store/userStore";
 
 const Login = () => {
@@ -10,20 +10,20 @@ const Login = () => {
 
 	const handleAuth = async (val: { username: string; password: string }) => {
 		try {
-			const res = await axiosInstanse.post<{ token: string }>(
-				"/auth/login",
-				val
-			);
-
-			if (res.data.token) {
-				localStorage.setItem("token", res.data.token);
-				setUser(res.data.token);
-				axiosInstanse.defaults.headers.common.Authorization = `Bearer ${res.data.token}`;
+			const res = await api.loginForAccessTokenApiV1TokenPost({
+				...val,
+			});
+			console.log(res)
+			if (res.data.access_token) {
+				localStorage.setItem("token", res.data.access_token);
+				setUser(res.data.access_token);
+				// api.defaults.headers.common.Authorization = `Bearer ${res.data.access_token}`;
 				navigate("/");
+				setSecurityData(`Bearer ${res.data.access_token}`);
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				 console.log(error.code)
+				console.log(error.code);
 			} else {
 				console.error("Unexpected error:", error);
 			}

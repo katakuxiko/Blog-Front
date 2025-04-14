@@ -2,9 +2,9 @@ import { Button, Drawer, Flex, Spin, Typography } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
-import { axiosInstanse } from "../../axiosInstanse";
 import { MenuOutlined } from "@ant-design/icons";
 import useUserStore from "../../Store/userStore";
+import { instance } from '../../apiInstanse';
 
 const MainLayout = () => {
 	const navigate = useNavigate();
@@ -62,7 +62,7 @@ const MainLayout = () => {
 								onClick={() => {
 									localStorage.removeItem("token");
 									navigate("/auth/login");
-									axiosInstanse.defaults.headers.common.Authorization =
+									instance.defaults.headers.common.Authorization =
 										"";
 								}}
 							>
@@ -122,7 +122,7 @@ const MainLayout = () => {
 								onClick={() => {
 									localStorage.removeItem("token");
 									navigate("/auth/login");
-									axiosInstanse.defaults.headers.common.Authorization =
+									instance.defaults.headers.common.Authorization =
 										"";
 								}}
 							>

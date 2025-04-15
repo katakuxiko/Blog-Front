@@ -38,6 +38,14 @@ const DetailPage = () => {
 			<Typography.Text type="secondary">
 				{dayjs(detailData?.created_at).format("DD MMMM YYYY")}
 			</Typography.Text>
+			{detailData?.image_url && (
+				<div className="p-4">
+					<img
+						src={detailData.image_url}
+						style={{ maxHeight: "500px" }}
+					/>
+				</div>
+			)}
 			<MDEditor.Markdown
 				className="bg-amber-50"
 				source={detailData?.content}

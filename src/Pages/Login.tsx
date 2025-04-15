@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Form, Input, Typography } from "antd";
+import { Button, Divider, Flex, Form, Input, message, Typography } from "antd";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
 import { api, setSecurityData } from "../apiInstanse";
@@ -7,13 +7,13 @@ import useUserStore from "../Store/userStore";
 const Login = () => {
 	const navigate = useNavigate();
 	const { setUser } = useUserStore();
+	const [messageApi, contextHolder] = message.useMessage();
 
 	const handleAuth = async (val: { username: string; password: string }) => {
 		try {
 			const res = await api.loginForAccessTokenApiV1TokenPost({
 				...val,
 			});
-			console.log(res)
 			if (res.data.access_token) {
 				localStorage.setItem("token", res.data.access_token);
 				setUser(res.data.access_token);
@@ -22,8 +22,10 @@ const Login = () => {
 				setSecurityData(`Bearer ${res.data.access_token}`);
 			}
 		} catch (error) {
+			messageApi.error("Неверный логин или пароль!");
+
 			if (error instanceof AxiosError) {
-				console.log(error.code);
+				console.error(error);
 			} else {
 				console.error("Unexpected error:", error);
 			}
@@ -32,6 +34,7 @@ const Login = () => {
 
 	return (
 		<div>
+			{contextHolder}
 			<Flex vertical>
 				<Typography.Title level={3}>Вход</Typography.Title>
 				<Form onFinish={handleAuth} layout="vertical">

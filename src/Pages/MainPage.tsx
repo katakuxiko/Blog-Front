@@ -1,8 +1,8 @@
 import { message, Skeleton } from "antd";
 import { useEffect, useState } from "react";
+import { PostResponse } from "../Api";
 import BlogCard from "../Widgets/BlogCard";
-import { api } from '../apiInstanse';
-import { PostResponse } from '../Api';
+import { api } from "../apiInstanse";
 
 const MainPage = () => {
 	const [posts, setPosts] = useState<PostResponse[]>([]);

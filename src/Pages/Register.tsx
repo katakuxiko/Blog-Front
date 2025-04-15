@@ -8,6 +8,7 @@ import { api } from "../apiInstanse";
 const Register = () => {
 	const navigate = useNavigate();
 	const [password, setPassword] = useState("");
+	const [messageApi, contextHolder] = message.useMessage();
 
 	const passwordRules = [
 		{ text: "Минимум 8 символов", check: (val: string) => val.length >= 8 },
@@ -35,13 +36,18 @@ const Register = () => {
 			});
 
 			if (res.data) {
-				message.success("Вы успешно зарегистрировались!");
+				messageApi.success("Вы успешно зарегистрировались!");
 				navigate("/auth/login");
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				if (error.response?.status === 401) {
-					message.warning(error.response.data);
+					messageApi.warning(error.response.data);
+				}
+				if (error.code === "400") {
+					messageApi.warning(
+						"Пользователь с таким именем уже существует"
+					);
 				}
 			} else {
 				console.error("Unexpected error:", error);
@@ -51,11 +57,26 @@ const Register = () => {
 
 	return (
 		<div>
+			{contextHolder}
 			<Flex vertical>
 				<Typography.Title level={3}>
 					Зарегистрироваться
 				</Typography.Title>
 				<Form onFinish={handleAuth} layout="vertical">
+					<Form.Item
+						required={false}
+						rules={[
+							{ required: true, message: "Обязательное поле" },
+							{
+								type: "email",
+								message: "Введите корректный email",
+							},
+						]}
+						label="Почта"
+						name="email"
+					>
+						<Input size="large" placeholder="Введите логин" />
+					</Form.Item>
 					<Form.Item
 						required={false}
 						rules={[

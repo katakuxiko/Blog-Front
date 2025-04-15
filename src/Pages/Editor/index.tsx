@@ -1,9 +1,11 @@
 import MDEditor from "@uiw/react-md-editor";
 import { Button, Flex, Form, Input, Typography, Upload, message } from "antd";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 import { api } from "../../apiInstanse";
 import { PostCreate } from "../../Api";
+import { convertImageUrlToBase64 } from "../../utils/base64";
+import { useForm } from "antd/es/form/Form";
 
 const Editor = () => {
 	const [value, setValue] = useState("# Test");
@@ -11,23 +13,72 @@ const Editor = () => {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [messageApi, contextHolder] = message.useMessage();
+	const [params] = useSearchParams();
+	const [form] = useForm();
+	const postId = params.get("id");
+
+	const getInitialValues = async () => {
+		const postId = params.get("id");
+
+		if (postId) {
+			api.getPostApiV1PostsPostIdGet(+postId, {}).then(async (res) => {
+				if (res.data) {
+					setValue(res.data.content);
+					if (res.data.image_url) {
+						const imageBase64 = await convertImageUrlToBase64(
+							res.data.image_url
+						);
+						setBase64File(imageBase64);
+						form.setFieldsValue({
+							...res.data,
+						});
+					}
+				}
+			});
+		}
+
+		return null;
+	};
+
+	useEffect(() => {
+		getInitialValues();
+	}, []);
 
 	const createPost = async (data: PostCreate) => {
-		const hide = messageApi.loading("Создание поста...", 0);
+		const hide = messageApi.loading(
+			postId ? "Обновление поста..." : "Создание поста...",
+			0
+		);
 		setLoading(true);
 		try {
-			const res = await api.createPostApiV1PostsPost({
-				...data,
-				content: value,
-				image_base64: base64File?.replace(
-					/^data:image\/\w+;base64,/,
-					""
-				),
-			});
+			if (postId) {
+				const res = await api.updatePostApiV1PostsPostIdPut(+postId, {
+					...data,
+					content: value,
+					image_base64: base64File?.replace(
+						/^data:image\/\w+;base64,/,
+						""
+					),
+				});
+				if (res.data) {
+					message.success("Пост успешно обновлён");
+					navigate("/");
+				}
+				return;
+			} else {
+				const res = await api.createPostApiV1PostsPost({
+					...data,
+					content: value,
+					image_base64: base64File?.replace(
+						/^data:image\/\w+;base64,/,
+						""
+					),
+				});
 
-			if (res.data) {
-				message.success("Пост успешно создан");
-				navigate("/");
+				if (res.data) {
+					message.success("Пост успешно создан");
+					navigate("/");
+				}
 			}
 		} catch (error) {
 			console.error(error);
@@ -39,7 +90,7 @@ const Editor = () => {
 	};
 
 	return (
-		<Form onFinish={createPost} layout="vertical">
+		<Form onFinish={createPost} layout="vertical" form={form}>
 			{contextHolder}
 			<Flex gap={12} data-color-mode="light" vertical>
 				<Typography.Title level={2}>Форма создания</Typography.Title>

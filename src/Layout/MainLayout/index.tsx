@@ -15,6 +15,12 @@ const MainLayout = () => {
 	const menu = [
 		{ title: "Главная", path: "/" },
 		{ title: "Редактор", path: "/editor" },
+		...(user
+			? [
+					{ title: "Профиль", path: "/profile" },
+					{ title: "Мои публикации", path: "/mypost" },
+			  ]
+			: []),
 	];
 
 	useEffect(() => {
@@ -51,7 +57,7 @@ const MainLayout = () => {
 				<Flex
 					align="center"
 					justify="space-between"
-					className="fixed top-0 z-50 left-0 md:!hidden h-14 !p-6 bg-white w-full border-b-gray-700 border-b-[0.2px]"
+					className="fixed top-0 z-50 left-0 md:!hidden h-14 !p-6 bg-white w-full shadow-lg"
 				>
 					<MenuOutlined
 						onClick={() => {
@@ -82,6 +88,7 @@ const MainLayout = () => {
 								<NavLink
 									key={title}
 									to={path}
+									onClick={() => setMenuOpen(false)}
 									className={`text-xl font-semibold hover:!text-blue-500 ${
 										location.pathname === path
 											? "!text-gray-950 "
@@ -112,8 +119,8 @@ const MainLayout = () => {
 					</Flex>
 				</Drawer>
 			</header>
-			<div className="w-full mb-16 pt-12  flex justify-center items-center flex-col">
-				<div className="sticky left-0 bg-white p-4 w-full z-50 top-0 shadow-lg">
+			<div className="w-full mb-12 pt-12  flex justify-center items-center flex-col">
+				<div className="sticky left-0 bg-white p-4 w-full z-50 top-0 shadow-lg hidden md:!block">
 					<div className="hidden md:block justify-items-center items-center ">
 						<Flex
 							justify="space-between"
@@ -155,7 +162,7 @@ const MainLayout = () => {
 						</Flex>
 					</div>
 				</div>
-				<div className="max-w-4xl bg-white p-4 w-full shadow-lg min-h-dvh mt-4 mb-24 rounded-2xl">
+				<div className="max-w-4xl bg-white p-4 w-full shadow-lg min-h-dvh mt-4 rounded-2xl">
 					<Outlet />
 
 					<footer className="text-center text-gray-500 text-sm bottom-4 mt-4 w-full left-0 absolute">

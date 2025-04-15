@@ -9,6 +9,7 @@ import Editor from "./Pages/Editor";
 import Login from "./Pages/Login";
 import MainPage from "./Pages/MainPage";
 import Register from "./Pages/Register";
+import MyPosts from './Pages/MyPosts';
 
 const App = () => {
 	useEffect(() => {
@@ -56,6 +57,10 @@ const App = () => {
 				{
 					path: "/editor",
 					element: <Editor />,
+				},
+				{
+					path: "/mypost",
+					element: <MyPosts />,
 				},
 			],
 		},

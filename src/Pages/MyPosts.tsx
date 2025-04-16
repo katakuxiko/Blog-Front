@@ -18,6 +18,7 @@ const MyPosts = () => {
 			}
 		} catch (error) {
 			message.warning("Не удалось получить данные постов");
+			console.error(error);
 		} finally {
 			setLoading(false);
 		}
@@ -30,7 +31,7 @@ const MyPosts = () => {
 	return (
 		<div>
 			{loading ? (
-				<div className='flex justify-center items-center h-24'>
+				<div className="flex justify-center items-center h-24">
 					<Spin size="large" />
 				</div>
 			) : null}{" "}

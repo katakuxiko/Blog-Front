@@ -1,4 +1,4 @@
-import { ConfigProvider, message } from "antd";
+import { Button, ConfigProvider, message, Result } from "antd";
 import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { instance } from "./apiInstanse";
@@ -9,9 +9,13 @@ import Editor from "./Pages/Editor";
 import Login from "./Pages/Login";
 import MainPage from "./Pages/MainPage";
 import Register from "./Pages/Register";
-import MyPosts from './Pages/MyPosts';
+import MyPosts from "./Pages/MyPosts";
+import useUserStore from "./Store/userStore";
+import Moderate from './Pages/Moderate';
 
 const App = () => {
+	const { clearUser } = useUserStore();
+
 	useEffect(() => {
 		const interceptor = instance.interceptors.response.use(
 			(response) => response,
@@ -22,6 +26,11 @@ const App = () => {
 					if (error.response.status === 403) {
 						localStorage.clear();
 						window.location.href = "/auth/login";
+					}
+
+					if (error.response.status === 401) {
+						localStorage.clear();
+						clearUser();
 					}
 
 					if (error.response.data) {
@@ -62,6 +71,10 @@ const App = () => {
 					path: "/mypost",
 					element: <MyPosts />,
 				},
+				{
+					path: "/moderate",
+					element: <Moderate />,
+				},
 			],
 		},
 		{
@@ -77,6 +90,26 @@ const App = () => {
 					element: <Register />,
 				},
 			],
+		},
+		{
+			path: "*",
+			element: (
+				<Result
+					status={404}
+					title="404"
+					subTitle="Страница не найдена"
+					extra={
+						<Button
+							type="primary"
+							size="large"
+							className="bg-blue-500 text-white px-4 py-2 rounded"
+							onClick={() => (window.location.href = "/")}
+						>
+							На главную
+						</Button>
+					}
+				/>
+			),
 		},
 	]);
 

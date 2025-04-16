@@ -2,12 +2,14 @@ import { Badge, Flex, Typography } from "antd";
 import type { FC } from "react";
 import { PostResponse } from "../Api";
 import dayjs from "dayjs";
+import { Link } from "react-router";
 
 const BlogCard: FC<PostResponse & { isMy?: boolean }> = ({
 	title,
 	id,
 	post_status,
 	created_at,
+	approval_status,
 	content,
 	image_url,
 	isMy = false,
@@ -42,6 +44,11 @@ const BlogCard: FC<PostResponse & { isMy?: boolean }> = ({
 					<Typography.Paragraph>
 						{content.slice(0, 25)}
 					</Typography.Paragraph>
+					{isMy && (
+						<Typography.Text type="secondary">
+							Статус: {approval_status}
+						</Typography.Text>
+					)}
 					<div>
 						{image_url && (
 							<img
@@ -52,11 +59,9 @@ const BlogCard: FC<PostResponse & { isMy?: boolean }> = ({
 							/>
 						)}
 					</div>
-					<Typography.Link
-						href={isMy ? `/editor?id=${id}` : `/post/${id}`}
-					>
+					<Link to={isMy ? `/editor?id=${id}` : `/post/${id}`}>
 						{isMy ? "Редактировать" : "Читать далее"}
-					</Typography.Link>
+					</Link>
 				</Flex>
 			</div>
 		</Badge.Ribbon>

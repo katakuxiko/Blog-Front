@@ -1,10 +1,11 @@
 import { jwtDecode } from "jwt-decode";
 import { create } from "zustand";
-import { instance } from '../apiInstanse';
+import { instance } from "../apiInstanse";
 
 // Определяем интерфейс для состояния пользователя
 interface User {
 	name: string;
+	role: string;
 }
 
 interface UserState {
@@ -19,10 +20,10 @@ const useUserStore = create<UserState>((set) => ({
 	user: null,
 	token: null,
 	setUser: (token: string) => {
-		const { sub } = jwtDecode<{ sub: string }>(token);
+		const { sub, role } = jwtDecode<{ sub: string; role: string }>(token);
 		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 
-		set({ token, user: { name: sub } });
+		set({ token, user: { name: sub, role: role } });
 	},
 	clearUser: () => set({ user: null }),
 }));

@@ -12,7 +12,10 @@ const MainPage = () => {
 		const getPosts = async () => {
 			setLoading(true);
 			try {
-				const res = await api.getAllPostsApiV1PostsGet({});
+				const res = await api.getAllPostsApiV1PostsGet({
+					post_status: "published",
+					approval_status: "approved",
+				});
 				if (res.data) {
 					setPosts(res.data);
 				}

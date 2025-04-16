@@ -27,12 +27,14 @@ const Register = () => {
 		},
 	];
 
-	const handleAuth = async (val: { username: string; password: string }) => {
+	const handleAuth = async (val: {
+		username: string;
+		password: string;
+		email: string;
+	}) => {
 		try {
 			const res = await api.registerUserApiV1UsersPost({
-				password: val.password,
-				username: val.username,
-				email: val.username,
+				...val,
 			});
 
 			if (res.data) {

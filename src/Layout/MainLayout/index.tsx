@@ -14,12 +14,15 @@ const MainLayout = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const menu = [
 		{ title: "Главная", path: "/" },
-		{ title: "Редактор", path: "/editor" },
 		...(user
 			? [
 					{ title: "Профиль", path: "/profile" },
 					{ title: "Мои публикации", path: "/mypost" },
+					{ title: "Редактор", path: "/editor" },
 			  ]
+			: []),
+		...(user?.role === "ADMIN" || user?.role === "MODERATOR"
+			? [{ title: "На модерацию", path: "/moderate" }]
 			: []),
 	];
 
@@ -33,8 +36,9 @@ const MainLayout = () => {
 			setLoading(false);
 			return;
 		}
-
-		setUser(token);
+		if (!user) {
+			setUser(token);
+		}
 
 		setLoading(false);
 	}, [navigate, setUser]);

@@ -16,6 +16,7 @@ const Editor = () => {
 	const [params] = useSearchParams();
 	const [form] = useForm();
 	const postId = params.get("id");
+	const [type, setType] = useState<string>();
 
 	const getInitialValues = async () => {
 		const postId = params.get("id");
@@ -51,29 +52,28 @@ const Editor = () => {
 		);
 		setLoading(true);
 		try {
+			const payload: PostCreate = {
+				...data,
+				content: value,
+				post_status: type,
+				image_base64: base64File?.replace(
+					/^data:image\/\w+;base64,/,
+					""
+				),
+			};
+
 			if (postId) {
-				const res = await api.updatePostApiV1PostsPostIdPut(+postId, {
-					...data,
-					content: value,
-					image_base64: base64File?.replace(
-						/^data:image\/\w+;base64,/,
-						""
-					),
-				});
+				const res = await api.updatePostApiV1PostsPostIdPut(
+					+postId,
+					payload
+				);
 				if (res.data) {
 					message.success("Пост успешно обновлён");
 					navigate("/");
 				}
 				return;
 			} else {
-				const res = await api.createPostApiV1PostsPost({
-					...data,
-					content: value,
-					image_base64: base64File?.replace(
-						/^data:image\/\w+;base64,/,
-						""
-					),
-				});
+				const res = await api.createPostApiV1PostsPost(payload);
 
 				if (res.data) {
 					message.success("Пост успешно создан");
@@ -156,16 +156,30 @@ const Editor = () => {
 					onChange={(val) => setValue(val ?? "")}
 				/>
 
-				<div>
+				<Flex gap={12} justify="end" className="w-full mt-4">
 					<Button
+						onClick={() => {
+							setType("draft");
+						}}
+						htmlType="submit"
+						size="large"
+						loading={loading}
+					>
+						Сохранить как черновик
+					</Button>
+
+					<Button
+						onClick={() => {
+							setType("published");
+						}}
 						htmlType="submit"
 						size="large"
 						type="primary"
 						loading={loading}
 					>
-						Сохранить
+						Опубликовать
 					</Button>
-				</div>
+				</Flex>
 			</Flex>
 		</Form>
 	);

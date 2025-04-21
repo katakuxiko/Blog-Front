@@ -3,6 +3,7 @@ import type { FC } from "react";
 import { PostResponse } from "../Api";
 import dayjs from "dayjs";
 import { Link } from "react-router";
+import { postStatus } from '../constants/statuses';
 
 const BlogCard: FC<PostResponse & { isMy?: boolean }> = ({
 	title,
@@ -16,7 +17,7 @@ const BlogCard: FC<PostResponse & { isMy?: boolean }> = ({
 }) => {
 	return (
 		<Badge.Ribbon
-			text={isMy ? post_status : null}
+			text={isMy ? postStatus[post_status] : null}
 			placement="end"
 			color="blue"
 			style={{
@@ -46,7 +47,7 @@ const BlogCard: FC<PostResponse & { isMy?: boolean }> = ({
 					</Typography.Paragraph>
 					{isMy && (
 						<Typography.Text type="secondary">
-							Статус: {approval_status}
+							Статус: {postStatus[approval_status]}
 						</Typography.Text>
 					)}
 					<div>

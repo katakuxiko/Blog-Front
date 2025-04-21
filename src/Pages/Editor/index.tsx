@@ -104,9 +104,7 @@ const Editor = () => {
 					>
 						<Input size="large" placeholder="Наименование" />
 					</Form.Item>
-					<Form.Item name="description" label="Краткое описание">
-						<Input size="large" placeholder="Краткое описание" />
-					</Form.Item>
+
 					<Form.Item name="image" label="Фото">
 						<Upload
 							type="select"

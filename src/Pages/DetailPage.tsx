@@ -1,5 +1,5 @@
 import MDEditor from "@uiw/react-md-editor"
-import { Button, Flex, Form, Spin, Typography, message } from "antd"
+import { Button, Flex, Form, Popconfirm, Spin, Typography, message } from "antd"
 import { useForm } from "antd/es/form/Form"
 import TextArea from "antd/es/input/TextArea"
 import { AxiosError } from "axios"
@@ -9,6 +9,7 @@ import { useParams } from "react-router"
 import { CommentResponse, PostResponse } from "../Api"
 import { api } from "../apiInstanse"
 import useUserStore from "../Store/userStore"
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons"
 
 const DetailPage = () => {
   const { id } = useParams()
@@ -19,6 +20,8 @@ const DetailPage = () => {
   const [buttonLoading, setButtonLoading] = useState(false)
   const [form] = useForm()
   const [messageApi, contextHolder] = message.useMessage()
+  const [edit, setEdit] = useState<number>()
+  const [LoadingEdit, setLoadingEdit] = useState(false)
 
   const getComments = async () => {
     if (!id) {
@@ -151,22 +154,132 @@ const DetailPage = () => {
               </Button>
             </Flex>
           </Form>
-          {comments?.map((comment) => (
-            <div key={comment.id} className="px-4 py-2 bg-gray-100 rounded-lg">
-              <Typography.Text strong>{comment.owner_username}</Typography.Text>
-              <Typography.Paragraph
-                ellipsis={{
-                  rows: 2,
-                  expandable: true,
-                  symbol(expanded) {
-                    return expanded ? "Свернуть" : "Развернуть"
-                  },
-                }}
+          {comments?.map((comment) =>
+            comment.id !== edit ? (
+              <div
+                key={comment.id}
+                className="px-4 py-2 bg-gray-100 rounded-lg"
               >
-                {comment.content}
-              </Typography.Paragraph>
-            </div>
-          ))}
+                <Flex justify="space-between" align="center">
+                  <Typography.Text strong>
+                    {comment.owner_username}
+                  </Typography.Text>
+
+                  {user?.name === comment.owner_username && (
+                    <Button
+                      onClick={() => setEdit(comment.id)}
+                      icon={<EditOutlined />}
+                    />
+                  )}
+                </Flex>
+                <Typography.Paragraph
+                  ellipsis={{
+                    rows: 2,
+                    expandable: true,
+                    symbol(expanded) {
+                      return expanded ? "Свернуть" : "Развернуть"
+                    },
+                  }}
+                >
+                  {comment.content}
+                </Typography.Paragraph>
+              </div>
+            ) : (
+              <>
+                <Form
+                  initialValues={{ comment: comment.content }}
+                  onFinish={async (val) => {
+                    setLoadingEdit(true)
+                    try {
+                      const res =
+                        await api.updateCommentApiV1CommentsCommentIdPut(
+                          comment.id,
+                          val
+                        )
+                      if (res.data) {
+                        messageApi.success("Комментарий успешно обновлён")
+                        setEdit(undefined)
+                        getComments()
+                      }
+                    } catch (error) {
+                      messageApi.error("Произошла ошибка, попробуйте позже")
+                      console.error(error)
+                    } finally {
+                      setLoadingEdit(false)
+                    }
+                  }}
+                >
+                  <div
+                    key={comment.id}
+                    className="px-4 py-2 bg-gray-100 rounded-lg"
+                  >
+                    <Typography.Text strong className="mt-2">
+                      {comment.owner_username}
+                    </Typography.Text>
+                    <div className="h-2">&nbsp;</div>
+                    <Flex vertical gap={12}>
+                      <Form.Item
+                        name="comment"
+                        required={false}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Обязательное поле",
+                          },
+                        ]}
+                      >
+                        <TextArea
+                          size="large"
+                          placeholder="Введите ваш комментарий"
+                        />
+                      </Form.Item>
+                      <Flex justify="space-between" align="center">
+                        <Popconfirm
+                          title="Вы уверены что хотите удалить комментарий?"
+                          onConfirm={async () => {
+                            setLoadingEdit(true)
+                            try {
+                              const res =
+                                await api.deleteCommentApiV1CommentsCommentIdDelete(
+                                  comment.id
+                                )
+                              if (res.data) {
+                                messageApi.success("Комментарий успешно удалён")
+                                getComments()
+                              }
+                            } catch (error) {
+                              messageApi.error(
+                                "Произошла ошибка, попробуйте позже"
+                              )
+                              console.error(error)
+                            } finally {
+                              setLoadingEdit(false)
+                            }
+                          }}
+                        >
+                          <Button
+                            icon={<DeleteOutlined />}
+                            className="self-start mt-[-24px]"
+                            loading={edit === comment.id && LoadingEdit}
+                          >
+                            Удалить
+                          </Button>
+                        </Popconfirm>
+                        <Button
+                          loading={edit === comment.id && LoadingEdit}
+                          type="primary"
+                          className="self-end mt-[-24px]"
+                          htmlType="submit"
+                        >
+                          Обновить
+                        </Button>
+                      </Flex>
+                    </Flex>
+                  </div>
+                </Form>
+              </>
+            )
+          )}
         </div>
       </section>
     </div>

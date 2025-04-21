@@ -30,6 +30,7 @@ const MyPosts = () => {
 
 	return (
 		<div>
+
 			{loading ? (
 				<div className="flex justify-center items-center h-24">
 					<Spin size="large" />

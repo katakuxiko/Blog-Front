@@ -52,6 +52,25 @@ export interface CommentInDB {
   created_at: string;
 }
 
+/** CommentResponse */
+export interface CommentResponse {
+  /** Content */
+  content: string;
+  /** Id */
+  id: number;
+  /** Post Id */
+  post_id: number;
+  /** Owner Id */
+  owner_id: number;
+  /**
+   * Created At
+   * @format date-time
+   */
+  created_at: string;
+  /** Owner Username */
+  owner_username?: string | null;
+}
+
 /** CommentUpdate */
 export interface CommentUpdate {
   /** Content */
@@ -143,6 +162,46 @@ export interface UserCreate {
   email: string;
   /** Password */
   password: string;
+}
+
+/** UserProfileCreate */
+export interface UserProfileCreate {
+  /** Bio */
+  bio?: string | null;
+  /** Interests */
+  interests?: string | null;
+  /** Location */
+  location?: string | null;
+  /** Avatar Base64 */
+  avatar_base64?: string | null;
+}
+
+/** UserProfileOut */
+export interface UserProfileOut {
+  /** Bio */
+  bio?: string | null;
+  /** Interests */
+  interests?: string | null;
+  /** Location */
+  location?: string | null;
+  /** Id */
+  id: number;
+  /** User Id */
+  user_id: number;
+  /** Avatar Url */
+  avatar_url?: string | null;
+}
+
+/** UserProfileUpdate */
+export interface UserProfileUpdate {
+  /** Bio */
+  bio?: string | null;
+  /** Interests */
+  interests?: string | null;
+  /** Location */
+  location?: string | null;
+  /** Avatar Url */
+  avatar_url?: string | null;
 }
 
 /** UserResponse */
@@ -626,7 +685,7 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<CommentInDB[], HTTPValidationError>({
+      this.request<CommentResponse[], HTTPValidationError>({
         path: `/api/v1/comments/posts/${postId}/`,
         method: "GET",
         query: query,
@@ -692,6 +751,88 @@ export class Api<
     ) =>
       this.request<CommentInDB, HTTPValidationError>({
         path: `/api/v1/comments/${commentId}`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags user_profile, UserProfile
+     * @name GetMyProfileApiV1UserProfileProfilesMeGet
+     * @summary Get My Profile
+     * @request GET:/api/v1/user_profile/profiles/me
+     * @secure
+     */
+    getMyProfileApiV1UserProfileProfilesMeGet: (params: RequestParams = {}) =>
+      this.request<UserProfileOut, any>({
+        path: `/api/v1/user_profile/profiles/me`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags user_profile, UserProfile
+     * @name UpdateProfileApiV1UserProfileProfilesPut
+     * @summary Update Profile
+     * @request PUT:/api/v1/user_profile/profiles/
+     * @secure
+     */
+    updateProfileApiV1UserProfileProfilesPut: (
+      data: UserProfileUpdate,
+      params: RequestParams = {},
+    ) =>
+      this.request<UserProfileOut, HTTPValidationError>({
+        path: `/api/v1/user_profile/profiles/`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags user_profile, UserProfile
+     * @name CreateProfileApiV1UserProfileProfilesPost
+     * @summary Create Profile
+     * @request POST:/api/v1/user_profile/profiles/
+     * @secure
+     */
+    createProfileApiV1UserProfileProfilesPost: (
+      data: UserProfileCreate,
+      params: RequestParams = {},
+    ) =>
+      this.request<UserProfileOut, HTTPValidationError>({
+        path: `/api/v1/user_profile/profiles/`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags user_profile, UserProfile
+     * @name DeleteProfileApiV1UserProfileProfilesDelete
+     * @summary Delete Profile
+     * @request DELETE:/api/v1/user_profile/profiles/
+     * @secure
+     */
+    deleteProfileApiV1UserProfileProfilesDelete: (params: RequestParams = {}) =>
+      this.request<any, any>({
+        path: `/api/v1/user_profile/profiles/`,
         method: "DELETE",
         secure: true,
         format: "json",

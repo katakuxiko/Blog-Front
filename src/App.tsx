@@ -12,6 +12,7 @@ import Register from "./Pages/Register";
 import MyPosts from "./Pages/MyPosts";
 import useUserStore from "./Store/userStore";
 import Moderate from './Pages/Moderate';
+import ProfilePage from './Pages/ProfilePage';
 
 const App = () => {
 	const { clearUser } = useUserStore();
@@ -75,6 +76,10 @@ const App = () => {
 					path: "/moderate",
 					element: <Moderate />,
 				},
+				{
+					path: 'profile',
+					element: <ProfilePage />,
+				}
 			],
 		},
 		{

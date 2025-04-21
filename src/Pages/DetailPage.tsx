@@ -1,19 +1,19 @@
 import MDEditor from "@uiw/react-md-editor";
 import { Button, Flex, Form, Spin, Typography, message } from "antd";
+import { useForm } from "antd/es/form/Form";
+import TextArea from "antd/es/input/TextArea";
+import { AxiosError } from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { CommentResponse, PostResponse } from "../Api";
 import { api } from "../apiInstanse";
-import { CommentInDB, PostResponse } from "../Api";
-import TextArea from "antd/es/input/TextArea";
-import { AxiosError } from "axios";
 import useUserStore from "../Store/userStore";
-import { useForm } from "antd/es/form/Form";
 
 const DetailPage = () => {
 	const { id } = useParams();
 	const [detailData, setDetailData] = useState<PostResponse>();
-	const [comments, setComments] = useState<CommentInDB[]>([]);
+	const [comments, setComments] = useState<CommentResponse[]>([]);
 	const { user } = useUserStore();
 	const [loading, setLoading] = useState(true);
 	const [form] = useForm();
@@ -163,7 +163,7 @@ const DetailPage = () => {
 							className="px-4 py-2 bg-gray-100 rounded-lg"
 						>
 							<Typography.Text strong>
-								{comment.owner_id}
+								{comment.owner_username}
 							</Typography.Text>
 							<Typography.Paragraph
 								ellipsis={{

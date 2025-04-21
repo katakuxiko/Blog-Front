@@ -81,6 +81,16 @@ const Moderate = () => {
 							<Typography.Title level={4}>
 								{post.title}
 							</Typography.Title>
+							{post.image_url && (
+								<img
+									src={post.image_url}
+									alt="Post"
+									style={{
+										maxHeight: "250px",
+										objectFit: "cover",
+									}}
+								/>
+							)}
 							<Typography.Paragraph>
 								{post.content.slice(0, 100)}
 							</Typography.Paragraph>
